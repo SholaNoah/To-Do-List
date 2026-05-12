@@ -12,7 +12,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // ---- Menu Setup ----
-        int choice;
+        int choice = 0;
         do{
             System.out.println("\n==== To-Do List Menu ====");
             System.out.println("1. Display Tasks");
@@ -22,9 +22,22 @@ public class Main {
             System.out.println("5. Search Task");
             System.out.println("6. Exit");
                System.out.println("Enter your choice: ");
-               choice = scanner.nextInt();
-               scanner.nextLine();
-               // consume newline
+               
+                // --- INPUT VALIDATION STARTS HERE ---
+                if (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                    scanner.nextLine(); // clear the wrong input
+                    continue;           // restart the loop
+                }
+
+                choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+
+                if (choice < 1 || choice > 6) {
+                 System.out.println("Choice out of range. Please enter a number between 1 and 6.");
+                    continue;
+                }
+                // --- VALIDATION ENDS HERE ---
 
                switch (choice) {
                 case 1: taskmanager.listTasks();
@@ -40,18 +53,39 @@ public class Main {
                     break;
 
                 case 3: System.out.println("Enter task ID to remove: ");
+
+                    if (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Task ID must be a number.");
+                    scanner.nextLine(); // clear wrong input
+                    break;              // go back to menu
+            }
+
                     int removeId = scanner.nextInt();
                     scanner.nextLine(); // consume newline
                     taskmanager.removeTask(removeId);
                     break;
 
                 case 4: System.out.println("Enter task ID to mark as completed: ");
+
+                    if (!scanner.hasNextInt()){
+                        System.out.println("Invalid input. Task ID must be a number.");
+                        scanner.nextLine(); // clear wrong input
+                        break;              // go back to menu
+                    }
+
                     int completeId = scanner.nextInt();
                     scanner.nextLine(); // consume newline
                     taskmanager.markAsCompleted(completeId);
                     break;
 
                 case 5: System.out.println("Enter task ID to search: ");
+
+                    if (!scanner.hasNextInt()){
+                        System.out.println("Invalid input. Task ID must be a number.");
+                        scanner.nextLine(); // clear wrong input
+                        break;              // go back to menu
+                    }
+
                     int searchId = scanner.nextInt();
                     scanner.nextLine(); // consume newline
                     taskmanager.searchTask(searchId);
@@ -60,9 +94,7 @@ public class Main {
                 case 6: System.out.println("Adios Amigo...");
                     break;
 
-                    default:
-                        System.out.println("Invalid choice, try again.");
-                        break;
+            
                }
         } while (choice != 6);
         scanner.close();

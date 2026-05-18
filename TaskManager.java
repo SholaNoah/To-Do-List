@@ -62,4 +62,14 @@ public class TaskManager {
         }
         System.out.println("Task not found: " + id);
     }
+
+    // Call for a task (for editting a task)
+    public Task getTaskById(int id){
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                return task;
+            }
+        }
+        return null; // Return null if not found
+    }
 }

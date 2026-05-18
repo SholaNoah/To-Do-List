@@ -21,11 +21,12 @@ public class Main {
             System.out.println("4. Mark Task as Completed");
             System.out.println("5. Search Task");
             System.out.println("6. Exit");
+            System.out.println("7. Edit task)");
                System.out.println("Enter your choice: ");
                
                 // --- INPUT VALIDATION STARTS HERE ---
                 if (!scanner.hasNextInt()) {
-                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                    System.out.println("Invalid input. Please enter a number between 1 and 7.");
                     scanner.nextLine(); // clear the wrong input
                     continue;           // restart the loop
                 }
@@ -33,7 +34,7 @@ public class Main {
                 choice = scanner.nextInt();
                 scanner.nextLine(); // consume newline
 
-                if (choice < 1 || choice > 6) {
+                if (choice < 1 || choice > 7) {
                  System.out.println("Choice out of range. Please enter a number between 1 and 6.");
                     continue;
                 }
@@ -93,6 +94,87 @@ public class Main {
 
                 case 6: System.out.println("Adios Amigo...");
                     break;
+
+                case 7: System.out.print("Enter task ID to edit: ");
+
+                    if (!scanner.hasNextInt()) {
+                    System.out.println("Invalid input. Task ID must be a number.");
+                    scanner.nextLine(); // clear wrong input
+                    break;
+                    }
+
+                    int editId = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+
+                    Task taskToEdit = taskmanager.getTaskById(editId);
+
+                        if (taskToEdit == null) {
+                        System.out.println("Task not found.");
+                        break;
+                        }
+
+                    System.out.println("\nWhat would you like to edit?");
+                    System.out.println("1. Title");
+                    System.out.println("2. Description");
+                    System.out.println("3. Due Date");
+                    System.out.println("4. Status (Completed / Not Completed)");
+                    System.out.print("Enter your choice: ");
+
+                        if (!scanner.hasNextInt()) {
+                        System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                        scanner.nextLine();
+                        break;
+                        }
+
+                    int editChoice = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+
+                    switch (editChoice) {
+                        case 1:
+                        System.out.print("Enter new title: ");
+                        String newTitle = scanner.nextLine();
+                        taskToEdit.setTitle(newTitle);
+                        System.out.println("Title updated.");
+                        break;
+
+                        case 2:
+                        System.out.print("Enter new description: ");
+                        String newDescription = scanner.nextLine();
+                        taskToEdit.setDescription(newDescription);
+                        System.out.println("Description updated.");
+                        break;
+
+                        case 3:
+                        System.out.print("Enter new due date (DD-MM-YYYY): ");
+                        String newDueDate = scanner.nextLine();
+                        taskToEdit.setDueDate(newDueDate);
+                        System.out.println("Due date updated.");
+                        break;
+
+                        case 4:
+                        // You can either toggle or ask explicitly
+                        System.out.println("Current status: " + (taskToEdit.isStatus() ? "Completed" : "Not Completed"));
+                        System.out.print("Mark as completed? (yes/no): ");
+                        String statusInput = scanner.nextLine().trim().toLowerCase();
+                        if (statusInput.equals("yes") || statusInput.equals("y")) {
+                        taskToEdit.setStatus(true);
+                        System.out.println("Status set to Completed.");
+                        } else if (statusInput.equals("no") || statusInput.equals("n")) {
+                        taskToEdit.setStatus(false);
+                        System.out.println("Status set to Not Completed.");
+                        } else {
+                        System.out.println("Invalid input. Status not changed.");
+                        }
+                        break;
+
+                    default:
+                    System.out.println("Invalid choice. No changes made.");
+                    break;
+                    }
+
+    System.out.println("Task updated successfully.");
+    break;
+
 
             
                }

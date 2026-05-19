@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String [] args) {
         TaskManager taskmanager = new TaskManager();
+        taskmanager.loadTasksFromFile(); // Load tasks at startup
         Scanner scanner = new Scanner(System.in);
 
         // ---- Menu Setup ----
@@ -21,7 +22,7 @@ public class Main {
             System.out.println("4. Mark Task as Completed");
             System.out.println("5. Search Task");
             System.out.println("6. Exit");
-            System.out.println("7. Edit task)");
+            System.out.println("7. Edit task");
                System.out.println("Enter your choice: ");
                
                 // --- INPUT VALIDATION STARTS HERE ---
@@ -51,6 +52,7 @@ public class Main {
                     System.out.println("Enter task due date (DD-MM-YYYY): ");
                     String dueDate = scanner.nextLine();
                     taskmanager.addTask(title, description, dueDate);
+                    taskmanager.saveTasksToFile(); // Save after adding a task
                     break;
 
                 case 3: System.out.println("Enter task ID to remove: ");

@@ -1,4 +1,9 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /** Task Manager 
  * This is the brain of the whole app
@@ -18,7 +23,7 @@ public class TaskManager {
 
     // Add a task
     public void addTask(String title, String description, String dueDate) {
-        Task task = new Task(title, description, dueDate, false, nextId++);
+        Task task = new Task(nextId++, title, description, dueDate, false);
         tasks.add(task);
         System.out.println("Task added: " + task.getTitle());
     }
@@ -72,4 +77,60 @@ public class TaskManager {
         }
         return null; // Return null if not found
     }
+
+    // Where to save and load data
+    private final String FILE_NAME = "tasks.txt";
+
+    // Save tasks to file
+    public void saveTasksToFile() {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
+        for (Task task : tasks) {
+            writer.println(
+                task.getId() + "|" +
+                task.getTitle() + "|" +
+                task.getDescription() + "|" +
+                task.getDueDate() + "|" +
+                task.isStatus()
+            );
+        }
+        System.out.println("Tasks saved successfully.");
+    } catch (IOException e) {
+        System.out.println("Error saving tasks: " + e.getMessage());
+        }
+    }
+
+    // Load task from file
+    public void loadTasksFromFile() {
+    File file = new File(FILE_NAME);
+    if (!file.exists()) {
+        return; // No file yet, nothing to load
+    }
+
+    try (Scanner fileScanner = new Scanner(file)) {
+        while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine();
+            String[] parts = line.split("\\|");
+
+            if (parts.length == 5) {
+                int id = Integer.parseInt(parts[0]);
+                String title = parts[1];
+                String description = parts[2];
+                String dueDate = parts[3];
+                boolean status = Boolean.parseBoolean(parts[4]);
+
+                Task task = new Task(id, title, description, dueDate, status);
+                tasks.add(task);
+            }
+        }
+        System.out.println("Tasks loaded successfully.");
+        if (!tasks.isEmpty()) {
+        Task.setNextId(tasks.get(tasks.size() - 1).getId() + 1);
+           }
+
+    } catch (Exception e) {
+        System.out.println("Error loading tasks: " + e.getMessage());
+    }
+}
+
+
 }
